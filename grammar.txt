@@ -1,0 +1,61 @@
+Naive grammar:
+
+E -> T //
+E -> E+T // left recursion, todo add binary minus
+E -> E-T // left recursion
+T -> F //
+T -> T*F // left recursion
+F -> -F
+F -> n
+F -> (E)
+
+Removing left recursion:
+
+Instead E -> E+T | T | E-T:
+E -> TE'
+E' -> +TE'
+E' -> -TE'
+E' -> eps
+
+Instead T -> T*F | F :
+T -> FT'
+T' -> *FT'
+T' -> eps
+
+Result:
+
+E -> TE'
+E' -> +TE'
+E' -> -TE'
+E' -> eps
+T -> FT'
+T' -> *FT'
+T' -> eps
+F -> -F
+F -> n
+F -> (E)
+
+// no left recursion and right branching in this grammar
+
+FIRST sets:
+E  -> {- ; n; (}
+E' -> {+ ; - ; eps}
+T  -> {- ; n ; (}
+T' -> {* ; eps}
+F  -> {- ; n ; (}
+
+FOLLOW sets:
+E  -> {$ ; )}
+E' -> {$ ; )}
+T  -> {$ ; + ; -; )}
+T' -> {$ ; + ; -; )}
+F  -> {$ ; + ; -; * ; )}
+
+
+/*FOLLOW sets:
+E  -> {) ; $}
+E' -> {) ; $}
+T  -> {+ ; - ; ) ; $}
+T' -> {+ ; - ;  ) ; $}
+F  -> {* ; + ; - ; ) ; $}*/
+
